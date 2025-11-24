@@ -2,27 +2,28 @@ const express = require('express');
 const router = express.Router();
 const bookingController = require('../controllers/bookingController');
 const authMiddleware = require('../middleware/authMiddleware');
+const { cacheMiddleware, cacheKeys } = require('../middleware/cacheMiddleware');
 
 // All routes require authentication
 router.use(authMiddleware);
 
-// Get all bookings (admin only - could add role check)
-router.get('/', bookingController.getAll);
+// Get all bookings (admin only - could add role check) - with caching
+router.get('/', cacheMiddleware(180, cacheKeys.bookingList), bookingController.getAll);
 
-// Get user's bookings
-router.get('/my-bookings', bookingController.getMyBookings);
+// Get user's bookings - with caching
+router.get('/my-bookings', cacheMiddleware(180, cacheKeys.userBookings), bookingController.getMyBookings);
 
-// Get recommended rooms
-router.get('/recommended-rooms', bookingController.getRecommendedRooms);
+// Get recommended rooms - with shorter cache (60s)
+router.get('/recommended-rooms', cacheMiddleware(60), bookingController.getRecommendedRooms);
 
-// Get bookings for a floor plan
-router.get('/floor-plan/:floorPlanId', bookingController.getByFloorPlan);
+// Get bookings for a floor plan - with caching
+router.get('/floor-plan/:floorPlanId', cacheMiddleware(180), bookingController.getByFloorPlan);
 
-// Get bookings for a specific room
-router.get('/floor-plan/:floorPlanId/room/:roomId', bookingController.getByRoom);
+// Get bookings for a specific room - with caching
+router.get('/floor-plan/:floorPlanId/room/:roomId', cacheMiddleware(180), bookingController.getByRoom);
 
-// Get booking by ID
-router.get('/:id', bookingController.getById);
+// Get booking by ID - with caching
+router.get('/:id', cacheMiddleware(180, cacheKeys.booking), bookingController.getById);
 
 // Create booking
 router.post('/', bookingController.create);

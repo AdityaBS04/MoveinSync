@@ -10,7 +10,8 @@ if (!fs.existsSync(dataDir)) {
 
 // Create database connection
 const dbPath = path.join(dataDir, 'movensync.db');
-const db = new Database(dbPath, { verbose: console.log });
+// Removed verbose logging to keep console clean
+const db = new Database(dbPath);
 
 // Enable foreign keys
 db.pragma('foreign_keys = ON');

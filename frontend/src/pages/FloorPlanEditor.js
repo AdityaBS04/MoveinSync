@@ -21,6 +21,14 @@ const FloorPlanEditor = ({ viewOnly = false }) => {
   const [syncStatus, setSyncStatus] = useState(null); // 'syncing', 'synced', 'offline', 'failed'
   const [hasLocalChanges, setHasLocalChanges] = useState(false);
   const [floorPlanStatus, setFloorPlanStatus] = useState('draft'); // 'draft' or 'published'
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+
+  // Track changes to rooms
+  useEffect(() => {
+    if (rooms.length > 0) {
+      setHasUnsavedChanges(true);
+    }
+  }, [rooms]);
 
   // Load floor plan if editing existing one
   useEffect(() => {
@@ -138,6 +146,7 @@ const FloorPlanEditor = ({ viewOnly = false }) => {
           if (response.versionCreated) {
             alert('Changes submitted for review! Head user will review and merge your changes.');
             setShowNameDialog(false);
+            setHasUnsavedChanges(false); // Reset unsaved changes flag
             navigate('/floor-plans');
             return;
           }
@@ -145,15 +154,14 @@ const FloorPlanEditor = ({ viewOnly = false }) => {
           // Save to IndexedDB as well
           await indexedDBService.saveFloorPlan(response.plan, false);
           setHasLocalChanges(false);
+          setHasUnsavedChanges(false); // Reset unsaved changes flag
           setSyncStatus('synced');
           setTimeout(() => setSyncStatus(null), 3000);
 
           alert('Floor plan saved successfully!');
           setShowNameDialog(false);
-          if (!id) {
-            // Navigate to edit mode after creating
-            navigate(`/floor-plan/${response.plan.id}`);
-          }
+          // Redirect to floor plans dashboard after successful save
+          navigate('/floor-plans');
         }
       } else {
         // OFFLINE: Save to IndexedDB only
@@ -213,12 +221,12 @@ const FloorPlanEditor = ({ viewOnly = false }) => {
   };
 
   const handleBack = () => {
-    if (rooms.length > 0) {
+    if (hasUnsavedChanges) {
       if (window.confirm('You have unsaved changes. Are you sure you want to leave?')) {
-        navigate('/dashboard');
+        navigate('/floor-plans');
       }
     } else {
-      navigate('/dashboard');
+      navigate('/floor-plans');
     }
   };
 

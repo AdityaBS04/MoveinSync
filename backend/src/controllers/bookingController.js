@@ -2,6 +2,28 @@ const bookingModel = require('../models/bookingModel');
 const logger = require('../utils/logger');
 const floorPlanModel = require('../models/floorPlanModel');
 const roomRecommendationService = require('../services/roomRecommendationService');
+const { deleteCachePattern } = require('../config/redis');
+
+/**
+ * Invalidate booking-related caches
+ * Clears all booking caches to ensure fresh data after mutations
+ */
+const invalidateBookingCaches = async (userId = null) => {
+  try {
+    // Clear all booking list caches
+    await deleteCachePattern('bookings:*');
+    await deleteCachePattern('user_bookings:*');
+
+    // If specific user, clear their cache
+    if (userId) {
+      await deleteCachePattern(`*${userId}*booking*`);
+    }
+
+    console.log('🗑️  Booking caches invalidated');
+  } catch (error) {
+    console.error('Failed to invalidate booking caches:', error);
+  }
+};
 
 const bookingController = {
   // Get all bookings
@@ -101,7 +123,7 @@ const bookingController = {
   },
 
   // Create booking
-  create: (req, res) => {
+  create: async (req, res) => {
     try {
       const { floorPlanId, roomId, roomName, startTime, endTime, title, description, attendees } = req.body;
 
@@ -135,6 +157,9 @@ const bookingController = {
         attendees
       });
 
+      // Invalidate booking caches
+      await invalidateBookingCaches(req.user.userId);
+
       // Log booking creation
       logger.logBooking(req.user, 'create', booking, req);
 
@@ -153,7 +178,7 @@ const bookingController = {
   },
 
   // Update booking
-  update: (req, res) => {
+  update: async (req, res) => {
     try {
       const { id } = req.params;
       const { startTime, endTime, title, description, attendees } = req.body;
@@ -203,6 +228,9 @@ const bookingController = {
         attendees
       });
 
+      // Invalidate booking caches
+      await invalidateBookingCaches(req.user.userId);
+
       // Log booking update
       logger.logBooking(req.user, 'update', booking, req);
 
@@ -221,7 +249,7 @@ const bookingController = {
   },
 
   // Cancel booking
-  cancel: (req, res) => {
+  cancel: async (req, res) => {
     try {
       const { id } = req.params;
 
@@ -243,6 +271,9 @@ const bookingController = {
 
       const booking = bookingModel.cancel(id);
 
+      // Invalidate booking caches
+      await invalidateBookingCaches(req.user.userId);
+
       // Log booking cancellation
       logger.logBooking(req.user, 'cancel', booking, req);
 
@@ -261,7 +292,7 @@ const bookingController = {
   },
 
   // Delete booking
-  delete: (req, res) => {
+  delete: async (req, res) => {
     try {
       const { id } = req.params;
 
@@ -282,6 +313,9 @@ const bookingController = {
       }
 
       bookingModel.delete(id);
+
+      // Invalidate booking caches
+      await invalidateBookingCaches();
 
       res.json({
         success: true,
