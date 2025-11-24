@@ -5,6 +5,7 @@ import floorPlanService from '../services/floorPlanService';
 import indexedDBService from '../services/indexedDBService';
 import syncService from '../services/syncService';
 import VersionHistoryModal from '../components/VersionHistoryModal';
+import BookingHistoryModal from '../components/BookingHistoryModal';
 import './FloorPlanList.css';
 
 const FloorPlanList = () => {
@@ -14,6 +15,7 @@ const FloorPlanList = () => {
   const [loading, setLoading] = useState(true);
   const [unsyncedIds, setUnsyncedIds] = useState(new Set());
   const [versionModalOpen, setVersionModalOpen] = useState(false);
+  const [bookingModalOpen, setBookingModalOpen] = useState(false);
   const [selectedFloorPlan, setSelectedFloorPlan] = useState(null);
 
   useEffect(() => {
@@ -93,6 +95,11 @@ const FloorPlanList = () => {
   const handleViewVersions = (plan) => {
     setSelectedFloorPlan(plan);
     setVersionModalOpen(true);
+  };
+
+  const handleViewBookings = (plan) => {
+    setSelectedFloorPlan(plan);
+    setBookingModalOpen(true);
   };
 
   const handleVersionMerged = () => {
@@ -197,6 +204,12 @@ const FloorPlanList = () => {
                   {user?.role === 'admin' ? (
                     <>
                       <button
+                        onClick={() => handleViewBookings(plan)}
+                        className="btn-bookings"
+                      >
+                        📅 View Bookings
+                      </button>
+                      <button
                         onClick={() => navigate(`/floor-plan/${plan.id}`)}
                         className="btn-edit"
                       >
@@ -258,6 +271,18 @@ const FloorPlanList = () => {
           }}
           onVersionMerged={handleVersionMerged}
           currentUser={user}
+        />
+      )}
+
+      {/* Booking History Modal */}
+      {bookingModalOpen && selectedFloorPlan && (
+        <BookingHistoryModal
+          floorPlan={selectedFloorPlan}
+          isOpen={bookingModalOpen}
+          onClose={() => {
+            setBookingModalOpen(false);
+            setSelectedFloorPlan(null);
+          }}
         />
       )}
     </div>

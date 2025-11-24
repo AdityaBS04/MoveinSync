@@ -142,11 +142,30 @@ const floorPlanModel = {
     return floorPlanModel.findById(id);
   },
 
-  // Delete floor plan
+  // Delete floor plan (with validation)
   delete: (id) => {
-    const stmt = db.prepare('DELETE FROM floor_plans WHERE id = ?');
-    const info = stmt.run(id);
-    return info.changes > 0;
+    // Check if there are any bookings for this floor plan
+    const bookingCheckStmt = db.prepare('SELECT COUNT(*) as count FROM bookings WHERE floor_plan_id = ?');
+    const bookingCount = bookingCheckStmt.get(id);
+
+    if (bookingCount && bookingCount.count > 0) {
+      throw new Error(`Cannot delete floor plan. There are ${bookingCount.count} active booking(s) associated with it. Please cancel all bookings first.`);
+    }
+
+    // If no bookings, proceed with deletion
+    const transaction = db.transaction(() => {
+      // Delete all versions for this floor plan
+      const deleteVersionsStmt = db.prepare('DELETE FROM floor_plan_versions WHERE floor_plan_id = ?');
+      deleteVersionsStmt.run(id);
+
+      // Delete the floor plan itself
+      const deleteFloorPlanStmt = db.prepare('DELETE FROM floor_plans WHERE id = ?');
+      const info = deleteFloorPlanStmt.run(id);
+
+      return info.changes > 0;
+    });
+
+    return transaction();
   },
 
   // Publish a floor plan (change status from draft to published)

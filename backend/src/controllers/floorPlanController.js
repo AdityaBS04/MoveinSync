@@ -216,6 +216,15 @@ const floorPlanController = {
       });
     } catch (error) {
       console.error('Delete floor plan error:', error);
+
+      // Check if it's a booking constraint error
+      if (error.message && error.message.includes('Cannot delete floor plan')) {
+        return res.status(400).json({
+          success: false,
+          message: error.message
+        });
+      }
+
       res.status(500).json({
         success: false,
         message: 'Server error'

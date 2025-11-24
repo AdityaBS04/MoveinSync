@@ -8,6 +8,7 @@ import FloorPlanList from './pages/FloorPlanList';
 import MyBookings from './pages/MyBookings';
 import NavigatePage from './pages/Navigate';
 import ActivityLogs from './pages/ActivityLogs';
+import VersionPreview from './pages/VersionPreview';
 import PrivateRoute from './components/PrivateRoute';
 import { AuthProvider } from './context/AuthContext';
 import { NetworkProvider } from './context/NetworkContext';
@@ -59,6 +60,14 @@ function App() {
               element={
                 <PrivateRoute>
                   <FloorPlanEditor viewOnly={true} />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/floor-plan/version-preview/:id"
+              element={
+                <PrivateRoute>
+                  <VersionPreview />
                 </PrivateRoute>
               }
             />
