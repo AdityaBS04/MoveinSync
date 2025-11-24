@@ -1,0 +1,419 @@
+.activity-logs-page {
+  min-height: 100vh;
+  background: #f5f5f5;
+}
+
+.navbar {
+  background: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 16px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar-brand h2 {
+  margin: 0;
+  color: #667eea;
+  font-size: 24px;
+}
+
+.navbar-user {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.user-info {
+  color: #666;
+  font-size: 14px;
+}
+
+.btn-dashboard, .btn-logout {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.btn-dashboard {
+  background: #f5f5f5;
+  color: #333;
+}
+
+.btn-dashboard:hover {
+  background: #e0e0e0;
+}
+
+.btn-logout {
+  background: #f44336;
+  color: white;
+}
+
+.btn-logout:hover {
+  background: #d32f2f;
+}
+
+.content {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.header {
+  margin-bottom: 32px;
+}
+
+.header h1 {
+  margin: 0 0 8px 0;
+  color: #333;
+  font-size: 32px;
+}
+
+.subtitle {
+  margin: 0;
+  color: #666;
+  font-size: 16px;
+}
+
+/* Statistics Cards */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+  margin-bottom: 32px;
+}
+
+.stat-card {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.stat-icon {
+  font-size: 32px;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: #f5f5f5;
+}
+
+.stat-content {
+  flex: 1;
+}
+
+.stat-label {
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 4px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.stat-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: #333;
+}
+
+.stat-card.total .stat-icon {
+  background: #E3F2FD;
+}
+
+.stat-card.badge-auth .stat-icon {
+  background: #F3E5F5;
+}
+
+.stat-card.badge-floor-plan .stat-icon {
+  background: #E8F5E9;
+}
+
+.stat-card.badge-booking .stat-icon {
+  background: #FFF3E0;
+}
+
+.stat-card.badge-version .stat-icon {
+  background: #E1F5FE;
+}
+
+/* Filters Card */
+.filters-card {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 24px;
+}
+
+.filters-card h3 {
+  margin: 0 0 20px 0;
+  color: #333;
+  font-size: 18px;
+}
+
+.filters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  align-items: end;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.filter-group label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #666;
+}
+
+.filter-group select {
+  padding: 10px;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 14px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.filter-group select:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.filter-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-apply, .btn-clear {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.btn-apply {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.btn-apply:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.btn-clear {
+  background: #f5f5f5;
+  color: #333;
+}
+
+.btn-clear:hover {
+  background: #e0e0e0;
+}
+
+/* Logs Card */
+.logs-card {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.logs-card h3 {
+  margin: 0 0 20px 0;
+  color: #333;
+  font-size: 18px;
+}
+
+.logs-loading {
+  text-align: center;
+  padding: 60px 20px;
+  color: #666;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.empty-state p {
+  margin: 8px 0;
+  color: #666;
+  font-size: 16px;
+}
+
+.empty-state .hint {
+  font-size: 14px;
+  color: #999;
+}
+
+/* Logs Table */
+.logs-table-wrapper {
+  overflow-x: auto;
+}
+
+.logs-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.logs-table thead th {
+  background: #f9f9f9;
+  padding: 12px;
+  text-align: left;
+  font-weight: 600;
+  color: #666;
+  font-size: 13px;
+  text-transform: uppercase;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.logs-table tbody tr {
+  border-bottom: 1px solid #f0f0f0;
+  transition: all 0.2s;
+}
+
+.logs-table tbody tr:hover {
+  background: #f9f9f9;
+}
+
+.logs-table tbody td {
+  padding: 16px 12px;
+  font-size: 14px;
+}
+
+.time-cell {
+  color: #666;
+  white-space: nowrap;
+  font-size: 13px;
+}
+
+.user-info-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.user-name {
+  font-weight: 600;
+  color: #333;
+}
+
+.user-email {
+  font-size: 12px;
+  color: #999;
+}
+
+.action-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.action-badge.badge-auth {
+  background: #F3E5F5;
+  color: #6A1B9A;
+}
+
+.action-badge.badge-floor-plan {
+  background: #E8F5E9;
+  color: #2E7D32;
+}
+
+.action-badge.badge-booking {
+  background: #FFF3E0;
+  color: #F57C00;
+}
+
+.action-badge.badge-version {
+  background: #E1F5FE;
+  color: #0277BD;
+}
+
+.action-badge.badge-sync {
+  background: #E3F2FD;
+  color: #1976D2;
+}
+
+.action-badge.badge-default {
+  background: #F5F5F5;
+  color: #666;
+}
+
+.entity-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.entity-type {
+  font-weight: 600;
+  color: #333;
+  font-size: 13px;
+  text-transform: capitalize;
+}
+
+.entity-name {
+  font-size: 12px;
+  color: #999;
+}
+
+.description-cell {
+  color: #666;
+  max-width: 400px;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.status-badge.online {
+  background: #E8F5E9;
+  color: #2E7D32;
+}
+
+.status-badge.offline {
+  background: #FFF3E0;
+  color: #F57C00;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 20px;
+  color: #666;
+}
