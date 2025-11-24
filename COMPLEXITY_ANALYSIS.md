@@ -46,9 +46,8 @@
 ### 1.2 User Login
 **File:** `backend/src/controllers/authController.js::login`
 
-**Time Complexity:** `O(n)` where n = number of users
-- Email lookup: O(n) - linear search through users array
-- **Optimization:** Use HashMap for O(1) lookup
+**Time Complexity:** `O(1)` 
+- Use HashMap for O(1) lookup
 - Password comparison (bcrypt): O(1)
 - JWT generation: O(1)
 
@@ -84,15 +83,14 @@ const user = usersByEmail.get(email);
 ### 2.1 Get All Floor Plans
 **File:** `backend/src/models/floorPlanModel.js::findAll`
 
-**Time Complexity:** `O(n * m)` where:
+**Time Complexity:** `O(n )` where:
 - n = number of floor plans
-- m = average number of rooms per floor plan
 
 **Space Complexity:** `O(n * m)`
 - Returns array of all floor plans with rooms
 
 **With Caching:**
-- First request: O(n * m)
+- First request: O(n)
 - Subsequent requests: O(1) (cache hit)
 - Cache TTL: 5 minutes
 
