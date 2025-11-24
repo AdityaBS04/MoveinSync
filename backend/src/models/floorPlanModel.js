@@ -22,6 +22,18 @@ db.exec(`
   CREATE INDEX IF NOT EXISTS idx_floor_plans_created_by ON floor_plans(created_by)
 `);
 
+// Add status column if it doesn't exist
+try {
+  db.exec(`ALTER TABLE floor_plans ADD COLUMN status TEXT DEFAULT 'draft' CHECK(status IN ('draft', 'published'))`);
+} catch (error) {
+  // Column already exists, ignore
+}
+
+// Add index on status for faster filtering
+db.exec(`
+  CREATE INDEX IF NOT EXISTS idx_floor_plans_status ON floor_plans(status)
+`);
+
 const floorPlanModel = {
   // Find all floor plans (with optional status filter and role-based filtering)
   findAll: (userRole = null) => {

@@ -81,6 +81,8 @@ const addVersionControl = () => {
     // Create indexes
     db.exec(`CREATE INDEX IF NOT EXISTS idx_versions_floor_plan ON floor_plan_versions(floor_plan_id)`);
     db.exec(`CREATE INDEX IF NOT EXISTS idx_versions_created_by ON floor_plan_versions(created_by)`);
+    db.exec(`CREATE INDEX IF NOT EXISTS idx_versions_status ON floor_plan_versions(status)`);
+    db.exec(`CREATE INDEX IF NOT EXISTS idx_versions_floor_plan_status ON floor_plan_versions(floor_plan_id, status)`);
     db.exec(`CREATE INDEX IF NOT EXISTS idx_users_priority ON users(priority)`);
     console.log('✅ Created indexes');
 

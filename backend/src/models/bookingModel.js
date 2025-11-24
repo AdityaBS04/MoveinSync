@@ -34,10 +34,21 @@ db.exec(`
   CREATE INDEX IF NOT EXISTS idx_bookings_time ON bookings(start_time, end_time)
 `);
 
+db.exec(`
+  CREATE INDEX IF NOT EXISTS idx_bookings_status ON bookings(status)
+`);
+
 const bookingModel = {
-  // Find all bookings
+  // Find all bookings (optimized with JOIN to include user names)
   findAll: () => {
-    const stmt = db.prepare('SELECT * FROM bookings ORDER BY start_time DESC');
+    const stmt = db.prepare(`
+      SELECT
+        bookings.*,
+        users.full_name as user_name
+      FROM bookings
+      LEFT JOIN users ON bookings.user_id = users.id
+      ORDER BY bookings.start_time DESC
+    `);
     return stmt.all();
   },
 
